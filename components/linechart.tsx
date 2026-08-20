@@ -4,19 +4,42 @@ import { LineChart as RechartLineChart, Line, XAxis, YAxis, Tooltip, ResponsiveC
 type RevenueData = {
     month: string; 
     revenue: number;
-}
+    
+};
 
 
 
-export const LineChart = ({data}: {data: RevenueData[]}) => {
+export const LineChart = ({data, compact = false,}: {data: RevenueData[]; compact?: boolean;}) => {
     return(
-        <div className=" w-[950px] w-auto w-full h-[300px] bg-white rounded-lg shadow-md mt-15">
-            <h2 className = "mt-2 ml-3">Revenue Overview</h2>
+        <div className=" w-[950px] w-auto w-full h-[300px] bg-white rounded-lg shadow-lg mt-15 ">
+            <h2 style={{ fontFamily: 'Poppins, sans-serif' }} className = "mt-2 ml-3">Revenue Overview</h2>
             <ResponsiveContainer width="95%" height="95%">
-                <RechartLineChart data={data} margin={{ top: 15, bottom: 8, left: 4, right: 8 }}>
+                <RechartLineChart data={data}   margin={{ top: 15, bottom: 8, left: 4, right: 8 }}>
                     <CartesianGrid strokeDasharray="4 4" vertical={false} />
-                    <XAxis dataKey="month" interval={0} tick={{ fontSize: 10 }} tickLine={false} axisLine={{ stroke: "gray" }}/>
-                    <YAxis tickLine={false} axisLine={{ stroke: "gray" }} domain={[0, "auto"]}/>
+                    <XAxis dataKey="month"
+  interval={compact ? 1 : 0}
+  tick={{ fontSize: compact ? 10 : 12 }}
+  tickFormatter={(value) => {
+    const months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    ];
+
+    const parts = value.split(" ");
+    const monthNumber = Number(parts[1]);
+    const year = parts[2]?.slice(-2);
+
+    if (compact) {
+      // Dashboard
+      return `${months[monthNumber - 1]} ${year}`;
+    }
+
+    // Revenue Page
+    return `${months[monthNumber - 1]} 20${year}`;
+  }}
+  tickLine={false}
+  axisLine={{ stroke: "gray" }}/>
+                    <YAxis tickLine={false}  axisLine={{ stroke: "gray" }} domain={[0, "auto"]}/>
                     <Tooltip
                         cursor={{ stroke: "#7C6CF2", strokeWidth: 1, strokeDasharray: "4 4" }}
                         contentStyle={{

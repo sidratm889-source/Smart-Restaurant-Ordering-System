@@ -33,7 +33,7 @@ const emptyForm: PlanForm = {
 export default function EditPlanModal({
   onClose,
   onSave,
-  initialValues = emptyForm,
+ initialValues = emptyForm,
   plan = "",
 }: Props) {
   const [form, setForm] = useState<PlanForm>(initialValues ?? emptyForm);

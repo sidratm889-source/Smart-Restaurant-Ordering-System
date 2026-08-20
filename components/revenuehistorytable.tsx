@@ -3,6 +3,16 @@ import { collection, onSnapshot, query, Timestamp } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { useState, useEffect } from "react";
 
+type RevenueRow = {
+  id: string;
+  fullName: string;
+  plan: string;
+  amount: number;
+  status: string;
+  createdAt: Timestamp | null;
+  expiredAt: Timestamp | null;
+};
+
 type FirestoreInstant = Timestamp | Date | undefined | null;
 
 function toDateObject(value: FirestoreInstant): Date | null {
@@ -28,19 +38,13 @@ function formatFirestoreInstant(value: FirestoreInstant): string {
   });
 }
 
-type RevenueRow = {
-  id: string;
-  fullName: string;
-  plan: string;
-  amount: number;
-  status: string;
-  createdAt: Timestamp | null;
-  expiredAt: Timestamp | null;
-};
+
+
 
 export default function RevenueHistoryTable() {
-    const [rows, setRows] = useState<RevenueRow[]>([]);
-    useEffect(() =>{
+    
+   const [rows, setRows] = useState<RevenueRow[]>([]); 
+ useEffect(() =>{
         const q = query(collection(db, "paymentRequests"));
         const unsub = onSnapshot(q, (snap) => {
             const rows: RevenueRow[] = snap.docs.map((d) => {
@@ -58,22 +62,22 @@ export default function RevenueHistoryTable() {
         setRows(rows);
     });
     return () => unsub();
-}, []);
+}, []);  
 
     return(
         
         <div>
-        <h2 className = "text-lg font-bold mb-3">
+        <h2  style={{ fontFamily: 'Poppins, sans-serif' }} className = "text-2xl font-bold mb-10">
             Transaction History 
         </h2>
         
             
-        <div className = "flex w-[950px] overflow-x-auto rounded-md border bg-white p-4 ">
+        <div className = "border-gray-300 flex w-[950px] overflow-x-auto rounded-md border bg-white p-4 ">
             
             
-            <table className = "w-full table-fixed border-collapse">
-             <thead className = "bg-gray-200 rounded-md">
-                <tr className = "text-left border-b border-gray-500 ">
+            <table className = "w-full table-fixed border-collapse ">
+             <thead className = "bg-gray-200 rounded-lg w-200">
+                <tr className = "text-left border-b border-gray-500 text-gray-600">
                     <th className = "p-2">User</th>
                     <th className = "p-2">Plan</th>
                     <th className = "p-2">Amount</th>

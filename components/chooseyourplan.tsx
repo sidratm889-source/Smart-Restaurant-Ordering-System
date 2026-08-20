@@ -81,18 +81,19 @@ export default function ChooseYourPlan() {
                 </p>
               ))}
             </div>
+            <div className="mt-6  items-center gap-3">
             {plan.id === "free" ? (
               <button disabled={loading} onClick={handleFreePlan}
-               className="mt-10 ml-5 rounded-md bg-red-800 text-white w-35 h-10">
+               className="ml-5 mt-3 rounded-md bg-red-800 text-white w-35 h-10">
                {loading ? "Continue free" : "Continue free"}
               </button>
             ) : plan.id === "basic" ? (
-              <button onClick={() => router.push("/paymentdetails")} className="mt-10 ml-5 rounded-md bg-red-800 text-white w-35 h-10">
-                Choose Growth ➜
+              <button disabled={loading} onClick={() => router.push("/paymentdetails")} className="mt-5 ml-5 rounded-md bg-red-800 text-white w-35 h-10">
+               {loading ? "Choose Growth ➜" : "Choose Growth ➜"}
               </button>
-            ) : plan.id === "pro" ?(
-              <button onClick={() => router.push("/paymentdetails2")} className="mt-10 ml-5 rounded-md bg-red-800 text-white w-35 h-10">
-                Choose Premium
+            ) : plan.id === "premium" ? (
+              <button disabled = {loading} onClick={() => router.push("/paymentdetails2")} className="mt-5 mb-4 ml-7 rounded-md bg-red-800 text-white w-35 h-10">
+                {loading ? "Choose Premium" : "Choose Premium"}
               </button>
             ): null}
 
@@ -102,12 +103,14 @@ export default function ChooseYourPlan() {
                 setSelectedPlan(plan.id);
                 setShowDetails(true);
               }}
-              className="mt-5 bg-red-800 text-white ml-5 w-30 h-10 rounded-md"
+              className="ml-5  bg-red-800 text-white  w-30 h-10 rounded-md"
             >
               view details
             </button>
           </div>
+          </div>
         ))}
+        
       </div>
 
       {showDetails && selectedPlan === "free" && (

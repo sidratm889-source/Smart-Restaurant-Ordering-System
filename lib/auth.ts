@@ -5,12 +5,17 @@ import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 type SignupProfile = {
  
   fullName: string;
-  restaurantName?: string;
+  restaurantName: string;
 };
 
-export const loginUser = async (email: string, password: string) =>
-  signInWithEmailAndPassword(auth, email, password);
+export const loginUser = async (email: string, password: string) =>{
+ 
+const userCredential = await  signInWithEmailAndPassword(auth, email, password);
+const user = userCredential.user;
+}
 
+export const logoutUser  = async(email: string, password: string) => 
+  signOut(auth);
      
  
 export const signUpUser = async (email: string, password: string, profile: SignupProfile) => {
@@ -20,9 +25,7 @@ export const signUpUser = async (email: string, password: string, profile: Signu
   const fullName = profile.fullName.trim();
    const restaurantName = profile.restaurantName?.trim() || fullName;
   
-    await updateProfile(user, {
-      displayName: restaurantName,
-    });
+    
 
     await setDoc(doc(db, "restaurantProfiles", user.uid), {
       uid: user.uid,

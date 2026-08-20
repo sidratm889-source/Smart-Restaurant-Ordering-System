@@ -7,9 +7,10 @@ import {collection, addDoc, serverTimestamp, setDoc} from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 type ResSignupProps = {
-    onSignupSuccess?: () => void;
+  onClose?: () => void;
+  onSignupSuccess?: () => void;
 }
-export default function resSignup({onSignupSuccess}: ResSignupProps){
+export default function resSignup({ onClose, onSignupSuccess }: ResSignupProps){
    
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -44,15 +45,20 @@ const handleSignup = async(e: FormEvent<HTMLFormElement>) => {
       const trimmedFullName = fullName.trim();
       const trimmedEmail = email.trim();
      
-      await  signUpUser(email.trim(), password, {
-        
-  fullName: trimmedFullName,
-  
-});
-        const order = {
+      console.log("Starting signup with email:", trimmedEmail);
+      
+      // Step 1: Create user in Firebase Authentication
+      const userCredential = await signUpUser(trimmedEmail, password, {
+        fullName: trimmedFullName,
+      });
+      
+      console.log("User created successfully in Firebase Auth:", userCredential.user.uid);
+      
+      // Step 2: Create order in Firestore
+      const order = {
         orderId: "ORD-" + Date.now(),
         fullName: trimmedFullName,
-        email: email.trim(),
+        email: trimmedEmail,
         cart,
         grandTotal,
         status: "Received",
@@ -60,17 +66,36 @@ const handleSignup = async(e: FormEvent<HTMLFormElement>) => {
       };
 
       await addDoc(collection(db, "orders"), order);
+      console.log("Order saved to Firestore");
+      
       clearCart();
 
       if (onSignupSuccess) {
         onSignupSuccess();
       } else {
+        onClose?.();
         router.push("/app/resdashboard/order");
       }
+      
     }
-     
     catch(error: any){
-      setSignupError(error.message || "Signup failed");
+      console.error("SIGNUP ERROR:", error);
+      
+      // Firebase specific error handling
+      if (error.code === "auth/email-already-in-use") {
+        setSignupError("This email is already registered. Please login instead.");
+      } else if (error.code === "auth/invalid-email") {
+        setSignupError("Invalid email address.");
+      }
+      else {
+        setSignupError(error.message || "Signup failed. Please try again.");
+      }
+      
+      console.error("Full error details:", {
+        code: error.code,
+        message: error.message,
+        errorObject: error
+      });
     }
     finally {
       setLoading(false);
@@ -78,7 +103,21 @@ const handleSignup = async(e: FormEvent<HTMLFormElement>) => {
   };
 
   return(
-    <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg">
+
+    
+      <div className="fixed inset-0 bg-black/40 bg-opacity-20 flex items-center justify-center z-50 p-4">
+       <div className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg">
+                  
+                        <button
+                           type="button"
+                           onClick={() => onClose?.()}
+                           className="float-right text-2xl font-bold text-gray-600 hover:text-red-800"
+                        >
+                            ✕
+                        </button>
+                        
+                    
+                
        
       <h1 className="text-2xl font-bold mb-4 text-gray-800">
         Create Account & Place Order
@@ -86,7 +125,9 @@ const handleSignup = async(e: FormEvent<HTMLFormElement>) => {
       
       
       <form onSubmit={handleSignup}>
+  
         <div className="mb-4">
+          
           <label className="block text-gray-700 font-semibold mb-2">Full Name</label>
           <input 
             value={fullName} 
@@ -134,5 +175,6 @@ const handleSignup = async(e: FormEvent<HTMLFormElement>) => {
 
       </form>
     </div>
-  )
+    </div>
+  );
 }

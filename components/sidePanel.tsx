@@ -10,10 +10,10 @@ export default function SidePanel({isopen, toggleMenu}: Props){
 
     return(
         isopen &&(
-        <aside className = "   bottom: 0 z-index bg-black text-white  h-full h-screen w-60">
+        <aside className = "   bottom: 0 z-index bg-[#202023ec] text-white  h-full h-screen w-60">
            <div>
               
-            <h2 className ="p-8 mr-20"> OVERVIEW</h2>
+            <h2 className ="p-8 mr-20 pt-30"> OVERVIEW</h2>
             <Link  className = "ml-5 p-1 flex items-center gap-2" href = "/admin/dashboard"><img src = "/icons8-dashboard-48.png" className = "w-5 h-5" alt="Dashboard icon" />Dashboard</Link><br></br>
               <div className = "flex flex-col">
   

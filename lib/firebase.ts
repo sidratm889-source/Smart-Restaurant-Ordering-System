@@ -2,6 +2,7 @@ import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { Firestore, initializeFirestore } from "firebase/firestore";
+import {getStorage} from "firebase/storage";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -17,10 +18,11 @@ const firebaseConfig = {
 
 const app: FirebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
+ 
 const db: Firestore = initializeFirestore(app, {
   // Some environments block Firestore's default transport, causing backend timeout warnings.
   experimentalAutoDetectLongPolling: true,
 });
 const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
-
+export const storage = getStorage(app);
 export { app, auth, analytics, db };

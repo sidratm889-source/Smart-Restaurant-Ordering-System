@@ -20,8 +20,8 @@ export default function SubscriptionPlans() {
       // ignore bad saved data
     }
   }, []);
-
-  const handleEdit = (plan: (typeof defaultPlans)[keyof typeof defaultPlans]) => {
+  type Plan = (typeof defaultPlans)[keyof typeof defaultPlans];
+  const handleEdit = (plan: Plan) => {
     setSelectedPlan(plan.id);
     setShowEditPlanModal(true);
   };
@@ -57,13 +57,12 @@ export default function SubscriptionPlans() {
 
   return (
     <div>
-      <button type = "button" onClick = {() => setShowAddModal(true)}  className = "sticky mt-20  bg-red-800   w-25 h-10 rounded-md ml-215  text-white">+ Add Plan</button>
-      <h2 className="sticky   text-2xl mt-0 ml-15">Subscription Plans</h2>
+   <button type = "button" onClick = {() => setShowAddModal(true)} style={{ fontFamily: 'Poppins, sans-serif' }}  className = "sticky mt-20  bg-red-800   w-25 h-10 rounded-md ml-215  text-white">+ Add Plan</button>
+      <h2 style={{ fontFamily: 'Poppins, sans-serif' }} className="sticky text-2xl mt-0 ml-15">Subscription Plans</h2>
 
-      <div className="grid grid-cols-1 grid-cols-3 gap-10 mt-10">
+      <div style={{ fontFamily: 'Poppins, sans-serif' }} className="grid grid-cols-1 grid-cols-3 gap-10 mt-10">
         {Object.values(plans).map((plan) => (
-          <div
-          key={plan.id}
+          <div key={plan.id}
             className="w-70 h-110 rounded-lg bg-white border border-gray-300"
           >
             <h3   className="mt-2 ml-5">
@@ -95,7 +94,7 @@ export default function SubscriptionPlans() {
 
           </div>
         ))}
-      </div>
+    </div>
 
       {showEditPlanModal && selectedPlan && currentPlan && (
         <EditPlanModal

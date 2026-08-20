@@ -27,15 +27,15 @@ export default function DonutChart(){
 
             </ResponsiveContainer>
             <div className = "mt-0 mb-2">
-            <h2 className = "mb-3 mt-3 text-left ml-18"> Subscription Plan</h2>
+            <h2 className = "subs-h1"> Subscription Plan</h2>
             <div className = "mt-1  gap-1  items-center ml-35 grid grid-cols-2">
             <div className = "flex items-center gap-1">                 
 <div className = "flex rounded-sm w-2 h-2 bg-purple-500 items-center gap-1"></div>
-<span>Pro</span>
+<span className = "pro">Pro</span>
 </div>
 <div className = "flex items-center gap-1">
 <div className = "flex rounded-sm w-2 h-2 bg-green-500 "></div>
-<span>Basic</span>
+<span className = "basic">Basic</span>
 </div>
 </div>
 </div>
